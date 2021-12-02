@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+table, th, td {
+	padding: 5px;
+}
+
+body {
+	background-color: #D7E9F7;
+}
+
+.div {
+	margin-top: 40px;
+}

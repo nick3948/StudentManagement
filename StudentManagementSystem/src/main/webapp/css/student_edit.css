@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+table, th, td {
+	padding: 5px;
+}
+
+body {
+	background-color: #D7E9F7;
+}
+
+.div {
+	margin-top: 40px;
+}
+
+.btn:hover {
+	box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0
+		rgba(0, 0, 0, 0.19);
+}

@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+.btn:hover {
+	box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0
+		rgba(0, 0, 0, 0.19);
+}
+
+#myInput:hover {
+	box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0
+		rgba(0, 0, 0, 0.19);
+}
+
+#myTable {
+	width: 100%;
+	border: 1px solid #ddd;
+	font-size: 18px;
+	position: fixed;
+	top: 145px;
+}
+
+body {
+	background-color: #F1F9F9;
+}
+
+.alert {
+	position: fixed;
+	top: 53px;
+	left: 45%;
+}
+
+.navbar {
+	width: 97.2%;
+}
+
+tr a:hover {
+	box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0
+		rgba(0, 0, 0, 0.19);
+}
