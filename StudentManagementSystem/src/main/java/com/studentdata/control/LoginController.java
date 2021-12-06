@@ -25,7 +25,7 @@ public class LoginController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		String dashboardUrl = request.getServletContext().getInitParameter("BASE_URL") + "/admin/dashboard";
 		String username, password;
 		username = request.getParameter("username");
 		password = request.getParameter("password");
@@ -34,7 +34,7 @@ public class LoginController extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("adminLoggedIn", username);
 			// Redirect to get method
-			response.sendRedirect(request.getServletContext().getInitParameter("BASE_URL") + "/admin/dashboard");
+			response.sendRedirect(dashboardUrl);
 		} else {
 			// Redirect to get method
 			response.sendRedirect(request.getRequestURL().toString());

@@ -20,7 +20,7 @@ public class StudentDao {
 	private final String selectByIdQuery = "SELECT * FROM details WHERE id=?";
 	private final String checkUser = "select * from details";
 
-	public int save(Student student) throws SQLException {
+	public int add(Student student) throws SQLException {
 
 		// Insert
 		PreparedStatement ps = con.prepareStatement(insertQuery);
@@ -33,7 +33,6 @@ public class StudentDao {
 		ps.setString(7, student.getDistrict());
 		ps.setString(8, student.getContact());
 		int result = ps.executeUpdate();
-		con.close();
 		return result;
 
 	}
@@ -55,7 +54,6 @@ public class StudentDao {
 			s.setContact(rs.getString(9));
 			studentsList.add(s);
 		}
-		con.close();
 		return studentsList;
 	}
 
@@ -76,7 +74,6 @@ public class StudentDao {
 			student.setContact(rs.getString(9));
 			return student;
 		}
-		con.close();
 		return null;
 	}
 
@@ -91,7 +88,6 @@ public class StudentDao {
 		ps.setString(7, student.getContact());
 		ps.setInt(8, id);
 		int result = ps.executeUpdate();
-		con.close();
 		return result;
 
 	}
@@ -101,9 +97,8 @@ public class StudentDao {
 		for (String id : studentids) {
 			PreparedStatement ps = con.prepareStatement(deleteQuery);
 			ps.setInt(1, Integer.parseInt(id));
-			// result += ps.executeUpdate();
+			result += ps.executeUpdate();
 		}
-		con.close();
 		return result;
 	}
 
@@ -115,7 +110,17 @@ public class StudentDao {
 				return true;
 			}
 		}
-		con.close();
+		return false;
+	}
+
+	public boolean contactExist(String contact) throws SQLException {
+		PreparedStatement ps = con.prepareStatement(checkUser);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			if (rs.getString(9).equals(contact)) {
+				return true;
+			}
+		}
 		return false;
 	}
 

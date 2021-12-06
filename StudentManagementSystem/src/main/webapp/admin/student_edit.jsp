@@ -1,8 +1,9 @@
+<%@page import="com.studentdata.dto.Student"%>
 <%@ page language="java" contentType="text/html;"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Student Edit Form</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -57,8 +58,9 @@
 		<a href="logout"><button
 				class="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button></a>
 	</nav>
+	${errors }
 	<%
-	String contact = (String) session.getAttribute("contact");
+	String contact = (String) session.getAttribute("contactexist");
 	String year = (String) session.getAttribute("year");
 	if (year != null && year.equals("fail")) {
 	%>
@@ -72,44 +74,45 @@
 	if (contact != null && contact.equals("fail")) {
 	%>
 	<div class="alert alert-danger alert-dismissable" role="alert">
-		Invalid contact number!<a href="#" class="close" data-dismiss="alert"
+		contact number already exist!<a href="#" class="close" data-dismiss="alert"
 			aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
-	session.removeAttribute("contact");
+	session.removeAttribute("contactexist");
 	}
+	Student student = (Student) request.getAttribute("student");
 	%>
 	<div class="div" align="center">
 		<h1>Edit Student Details</h1>
 		<br>
-		<form action="student?act=edit&id=${student.id }" method="post">
+		<form action="student?act=edit&id=<%=student.getId()%>" method="post">
 			<table style="with: 80%">
 				<tr>
 					<td>First Name</td>
 					<td><input type="text" class="form-control-sm"
-						name="firstname" value=${student.firstname } required="required" /></td>
+						name="firstname" value="<%=student.getFirstname()%>" /></td>
 				</tr>
 				<tr>
 					<td>Last Name</td>
-					<td><input type="text" value=${student.lastname }
-						class="form-control-sm" name="lastname" required="required" /></td>
+					<td><input type="text" value="<%=student.getLastname()%>"
+						class="form-control-sm" name="lastname" /></td>
 				</tr>
 				<tr>
 					<td>Birthday</td>
-					<td><input type="date" value=${student.birthday }
+					<td><input type="date" value="<%=student.getBirthday()%>"
 						class="form-control-sm" name="birthday" required="required" /></td>
 				</tr>
 				<tr>
 					<td>Gender</td>
-					<td><input type="radio" name="gender" value="male"
-						required="required" />&nbsp; Male<br> <input type="radio"
-						name="gender" value="female" required="required" />&nbsp; Female</td>
+					<td><input type="radio" name="gender" value="male" />&nbsp;
+						Male<br> <input type="radio" name="gender" value="female" />&nbsp;
+						Female</td>
 				</tr>
 				<tr>
 					<td>Select State</td>
-					<td><select style="width: 177px;" name="state" id="inputState"
-						class="form-control">
-							<option value="SelectState">${student.state }</option>
+					<td><select style="width: 177px;"
+						name="state" id="inputState" class="form-control">
+							<option value=""></option>
 							<option value="Andra Pradesh">Andra Pradesh</option>
 							<option value="Goa">Goa</option>
 							<option value="Haryana">Haryana</option>
@@ -132,22 +135,32 @@
 				</tr>
 				<tr>
 					<td>Select District</td>
-					<td><select style="width: 177px;" name="district"
-						id="inputDistrict" class="form-control">
-							<option value="">${student.district }</option>
+					<td><select  style="width: 177px;"
+						name="district" id="inputDistrict" class="form-control">
+							<option value=""></option>
 					</select></td>
 				</tr>
 				<tr>
 					<td>Contact No</td>
-					<td><input type="text" value=${student.contact }
+					<td><input type="text" value="<%=student.getContact()%>"
 						class="form-control-sm" name="contact" required="required" /></td>
 				</tr>
 			</table>
-			<br>
-			<br> <input type="submit" class="button" value="Save" />
+			<br> <br> <input type="submit" class="button" value="Save" />
 		</form>
 		<br>
 	</div>
+	<script>
+	window.onload = function myFunction() {
+		if (sessionStorage.getItem('count') % 2 == 0) {
+			document.body.style.backgroundColor = "#CDF0EA";
+			document.body.style.color = "black";
+		} else {
+			document.body.style.backgroundColor = "black";
+			document.body.style.color = "#03DAC6";
+		}
+	}
+	</script>
 	<script type="text/javascript"
 		src="<%=request.getServletContext().getInitParameter("BASE_URL")%>/js/student_edit.js"></script>
 </body>

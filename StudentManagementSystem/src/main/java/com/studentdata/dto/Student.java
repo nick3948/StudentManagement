@@ -2,33 +2,29 @@ package com.studentdata.dto;
 
 import java.sql.Date;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class Student {
 	private int id;
-	@NotNull(message = "First Name cannot be empty!")
+
+	@Size(min = 3, max = 100, message = "cannot be empty!")
 	private String firstname;
-	@NotNull(message = "Last Name cannot be empty!")
+	@Size(min = 3, max = 100, message = "cannot be empty!")
 	private String lastname;
-	@NotNull(message = "Please specify your gender!")
-	private String gender;
-	@NotNull(message = "Username cannot be empty!")
-	@Size(min = 5, max = 10, message = "Username ")
-	private String username;
 	@NotNull
-	@Size(min = 6, max = 100, message = "password must be min 6 characters!!")
+	private String gender;
+	@Size(min = 5, max = 10)
+	private String username;
+	@Size(min = 6, max = 100)
 	private String password;
-	@NotNull(message = "Please select the state!")
+	@NotEmpty
 	private String state;
-	@NotNull(message = "Please select the district!")
+	@NotEmpty
 	private String district;
-	@NotNull(message = "Contact cannot be empty!")
-	@Size(min = 10, max = 10, message = "contact must be 10 digits!!")
+	@Size(min = 10, max = 10, message = "size must contain 10 digits")
 	private String contact;
-	@NotNull(message = "Birthday cannot be empty!")
-	@Future(message = "Impossible to register before birth!")
 	private Date birthday;
 
 	public int getId() {

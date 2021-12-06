@@ -46,9 +46,10 @@
 				class="form-control mr-sm-2" type="text" id="myInput"
 				placeholder="Search" aria-label="Search"> &nbsp;&nbsp;&nbsp;
 		</form>
-		<a title="Dark/Light mode" class="btn btn-outline-secondary active" onclick="modeFunction()"><i class="fas fa-adjust"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
-		
-		<a title="click to logout!"
+		<a title="Dark/Light mode" class="btn btn-outline-secondary active"
+			id="darkmodetoggle" onclick="modeFunction()"><i
+			class="fas fa-adjust"></i></a>&nbsp;&nbsp;&nbsp;&nbsp; <a
+			title="click to logout!"
 			href="<%=request.getServletContext().getInitParameter("BASE_URL")%>/admin/logout"><button
 				class="btn btn-outline-danger my-2 my-sm-0">Logout</button></a>
 	</nav>
@@ -177,9 +178,29 @@
 			document.getElementById("queryparam").value = "edit";
 			document.getElementById("dashboardlist").submit();
 		}
-		function modeFunction() {
-			var element = document.body;
-			element.classList.toggle("dark-mode");
+		console.log(sessionStorage.getItem('count'));
+		window.onload = function myFunction() {
+			if (sessionStorage.getItem('count') % 2 == 0) {
+				document.body.style.backgroundColor = "#CDF0EA";
+				document.body.style.color = "black";
+			} else {
+				document.body.style.backgroundColor = "black";
+				document.body.style.color = "#03DAC6";
+			}
+		}
+		var button = document.getElementById("darkmodetoggle");
+		var count = 0;
+		button.onclick = function() {
+			count += 1;
+			console.log(count);
+			sessionStorage.setItem('count', count);
+			if (sessionStorage.getItem('count') % 2 != 0) {
+				document.body.style.backgroundColor = "black";
+				document.body.style.color = "#03DAC6";
+			} else {
+				document.body.style.backgroundColor = "#CDF0EA";
+				document.body.style.color = "black";
+			}
 		}
 	</script>
 	<script type="text/javascript"

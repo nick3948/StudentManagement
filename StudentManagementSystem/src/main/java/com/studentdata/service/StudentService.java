@@ -13,7 +13,7 @@ public class StudentService {
 
 		try {
 			if (id == 0)
-				return studentDao.save(student);
+				return studentDao.add(student);
 			else
 				return studentDao.edit(student, id);
 		} catch (SQLException e) {
@@ -58,6 +58,16 @@ public class StudentService {
 
 		try {
 			return studentDao.usernameExist(username);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public boolean contactExist(String contact) {
+
+		try {
+			return studentDao.contactExist(contact);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
