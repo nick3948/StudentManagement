@@ -1,3 +1,5 @@
+<%@page import="com.studentdata.dto.Student"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html;"%>
 
 <!DOCTYPE html>
@@ -76,8 +78,8 @@
 	if (contact != null && contact.equals("fail")) {
 	%>
 	<div class="alert alert-danger alert-dismissable" role="alert">
-		 contact number already exist!<a href="#" class="close" data-dismiss="alert"
-			aria-label="close">&nbsp;&#10007;</a>
+		contact number already exist!<a href="#" class="close"
+			data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
 	session.removeAttribute("contactexist");
@@ -100,66 +102,59 @@
 			<table style="with: 80%">
 				<tr>
 					<td>First Name</td>
-					<td><input type="text" class="form-control-sm" value="${student.firstname }"
-						name="firstname"  /></td>
+					<td><input type="text" class="form-control-sm"
+						value="${student.firstname }" name="firstname" /></td>
 				</tr>
 				<tr>
 					<td>Last Name</td>
-					<td><input value="${student.lastname }" type="text" class="form-control-sm" name="lastname"
-						 /></td>
+					<td><input value="${student.lastname }" type="text"
+						class="form-control-sm" name="lastname" /></td>
 				</tr>
 				<tr>
 					<td>Birthday</td>
-					<td><input value="${student.birthday }" type="date" class="form-control-sm" name="birthday"
-						 /></td>
+					<td><input value="${student.birthday }" type="date"
+						class="form-control-sm" name="birthday" /></td>
 				</tr>
 				<tr>
 					<td>Gender</td>
-					<td><input style="" type="radio" name="gender" value="male"
-						 />&nbsp; Male<br> <input type="radio"
-						name="gender" value="female"  />&nbsp; Female</td>
+					<td><input style="" type="radio" name="gender" value="male" />&nbsp;
+						Male<br> <input type="radio" name="gender" value="female" />&nbsp;
+						Female</td>
 				</tr>
 				<tr>
 					<td>User name</td>
-					<td><input value="${student.username }" type="text" class="form-control-sm" name="username"
-						 /></td>
+					<td><input value="${student.username }" type="text"
+						class="form-control-sm" name="username" /></td>
 				</tr>
 				<tr>
 					<td>Select State</td>
-					<td><select style="width: 177px;" 
-						name="state" id="inputState" class="form-control">
-							<option value="SelectState">Select State</option>
-							<option value="Andra Pradesh">Andra Pradesh</option>
-							<option value="Goa">Goa</option>
-							<option value="Haryana">Haryana</option>
-							<option value="Himachal Pradesh">Himachal Pradesh</option>
-							<option value="Jammu and Kashmir">Jammu and Kashmir</option>
-							<option value="Karnataka">Karnataka</option>
-							<option value="Kerala">Kerala</option>
-							<option value="Madya Pradesh">Madya Pradesh</option>
-							<option value="Maharashtra">Maharashtra</option>
-							<option value="Manipur">Manipur</option>
-							<option value="Mizoram">Mizoram</option>
-							<option value="Nagaland">Nagaland</option>
-							<option value="Orissa">Orissa</option>
-							<option value="Punjab">Punjab</option>
-							<option value="Rajasthan">Rajasthan</option>
-							<option value="Sikkim">Sikkim</option>
-							<option value="Tamil Nadu">Tamil Nadu</option>
-							<option value="Telangana">Telangana</option>
+					<td><select required="required" style="width: 177px;"
+						name="state" id="inputState" class="form-control"
+						onchange="getCity(this.value)">
+							<option value="">Select state</option>
+							<%
+							@SuppressWarnings("unchecked")
+							List<Student> list = (List<Student>) request.getAttribute("statedrop");
+
+							for (Student s : list) {
+							%>
+							<option value="<%=s.getC_id()%>"><%=s.getState()%></option>
+							<%
+							}
+							%>
 					</select></td>
 				</tr>
 				<tr>
-					<td>Select District</td>
-					<td><select style="width: 177px;" name="district"
-						id="inputDistrict" class="form-control">
-
+					<td>Select City</td>
+					<td id="city"><select required="required"
+						style="width: 177px;" class="form-control">
+							<option value="">Select city</option>
 					</select></td>
 				</tr>
 				<tr>
 					<td>Contact No</td>
-					<td><input value="${student.contact }" type="text" class="form-control-sm" name="contact"
-						 /></td>
+					<td><input value="${student.contact }" type="text"
+						class="form-control-sm" name="contact" /></td>
 				</tr>
 			</table>
 			<br> <br> <input type="submit" class="button" value="Save" />
@@ -167,15 +162,25 @@
 		<br>
 	</div>
 	<script>
-	window.onload = function myFunction() {
-		if (sessionStorage.getItem('count') % 2 == 0) {
-			document.body.style.backgroundColor = "#CDF0EA";
-			document.body.style.color = "black";
-		} else {
-			document.body.style.backgroundColor = "black";
-			document.body.style.color = "#03DAC6";
+		window.onload = function myFunction() {
+			if (sessionStorage.getItem('count') % 2 == 0) {
+				document.body.style.backgroundColor = "#CDF0EA";
+				document.body.style.color = "black";
+			} else {
+				document.body.style.backgroundColor = "black";
+				document.body.style.color = "#03DAC6";
+			}
 		}
-	}
+		function getCity(s_id) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("city").innerHTML = this.responseText;
+				}
+			};
+			xhttp.open("GET", "student?sid=" + s_id, true);
+			xhttp.send();
+		}
 	</script>
 
 	<script type="text/javascript"

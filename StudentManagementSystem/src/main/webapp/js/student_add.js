@@ -161,6 +161,6 @@ $("#inputState").change(
 				+ "<option value='" + optionsList[i] + "'>"
 				+ optionsList[i] + "</option>";
 		}
-		$("#inputDistrict").html(htmlString);
+		$("#inputCity").html(htmlString);
 
 	});

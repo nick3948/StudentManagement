@@ -64,14 +64,51 @@ public class StudentService {
 		return false;
 	}
 
-	public boolean contactExist(String contact) {
+	public boolean contactExist(String contact, int id) {
 
 		try {
-			return studentDao.contactExist(contact);
+			return studentDao.contactExist(contact, id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 
+	public List<Student> getAllState() {
+
+		try {
+			return studentDao.getAllStates();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public List<Student> getCityByState(int s_id) {
+
+		try {
+			return studentDao.getCityByState(s_id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public String getStateName(int state) {
+		try {
+			return studentDao.getStateName(state);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public String getCityName(int city) {
+		try {
+			return studentDao.getCityName(city);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

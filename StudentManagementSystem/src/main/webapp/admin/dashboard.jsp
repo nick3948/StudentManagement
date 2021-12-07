@@ -34,12 +34,12 @@
 			<li class="nav-item"><a class="nav-link" title="click to add!!"
 				href="student?act=add"><i class="fas fa-user-plus fa-1x"></i>
 					Save </a></li>
-			<li class="nav-item"><a class="nav-link" title="click to edit!"
-				onclick="editFun()"><i class="fas fa-user-edit fa-1x"></i> Edit
-			</a></li>
-			<li class="nav-item"><a class="nav-link"
-				title="click to delete!" onclick="deleteFun()"><i
-					class="fas fa-user-minus fa-1x"></i> Delete</a></li>
+			<li class="nav-item"><a style="cursor: pointer;"
+				class="nav-link" title="click to edit!" onclick="editFun()"><i
+					class="fas fa-user-edit "></i> Edit </a></li>
+			<li class="nav-item"><a style="cursor: pointer;"
+				class="nav-link" title="click to delete!" onclick="deleteFun()"><i
+					class="fas fa-user-minus "></i> Delete</a></li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0">
 			<input title="Search for students!!" onkeyup="myFunction()"
@@ -56,7 +56,7 @@
 	<%
 	@SuppressWarnings("unchecked")
 	List<Student> list = (List<Student>) request.getAttribute("student");
-	String delete = (String) session.getAttribute("delete");
+	String delete = (String) request.getAttribute("delete");
 	String add = (String) session.getAttribute("add");
 	String edit = (String) session.getAttribute("edit");
 	if (delete != null && delete.equals("success")) {
@@ -171,8 +171,11 @@
 			}
 		}
 		function deleteFun() {
-			document.getElementById("queryparam").value = "delete";
-			document.getElementById("dashboardlist").submit();
+			if (confirm('Are you sure??')) {
+				document.getElementById("queryparam").value = "delete";
+				document.getElementById("dashboardlist").submit();
+			}
+
 		}
 		function editFun() {
 			document.getElementById("queryparam").value = "edit";

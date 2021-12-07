@@ -19,10 +19,12 @@ public class Student {
 	private String username;
 	@Size(min = 6, max = 100)
 	private String password;
+	private int s_id;
 	@NotEmpty
 	private String state;
+	private int c_id;
 	@NotEmpty
-	private String district;
+	private String city;
 	@Size(min = 10, max = 10, message = "size must contain 10 digits")
 	private String contact;
 	private Date birthday;
@@ -87,16 +89,32 @@ public class Student {
 		return state;
 	}
 
+	public int getS_id() {
+		return s_id;
+	}
+
+	public void setS_id(int s_id) {
+		this.s_id = s_id;
+	}
+
+	public int getC_id() {
+		return c_id;
+	}
+
+	public void setC_id(int c_id) {
+		this.c_id = c_id;
+	}
+
 	public void setState(String state) {
 		this.state = state;
 	}
 
-	public String getDistrict() {
-		return district;
+	public String getCity() {
+		return city;
 	}
 
-	public void setDistrict(String district) {
-		this.district = district;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getContact() {

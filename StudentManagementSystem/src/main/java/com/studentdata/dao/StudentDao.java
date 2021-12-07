@@ -1,9 +1,11 @@
 package com.studentdata.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +15,13 @@ import com.studentdata.dto.Student;
 public class StudentDao {
 	Connection con = DBManager.getconfig();
 
-	private final String insertQuery = "INSERT INTO `person`.`details` (`firstname`, `lastname`,`birthday`, `gender`, `username`, `state`,`district`, `contact`) VALUES (?,?,?,?,?,?,?,?)";
-	private final String updateQuery = "update person.details set firstname=?, lastname=?, birthday=?, gender=?, state=?, district=?,contact=? where id=?";
+	private final String insertQuery = "INSERT INTO `person`.`details` (`firstname`, `lastname`,`birthday`, `gender`, `username`, `state`,`city`, `contact`) VALUES (?,?,?,?,?,?,?,?)";
+	private final String updateQuery = "update person.details set firstname=?, lastname=?, birthday=?, gender=?, state=?, city=?,contact=? where id=?";
 	private final String deleteQuery = "DELETE FROM details WHERE id=?";
-	private final String selectAllQuery = "SELECT * FROM details";
+	private final String selectAllStudent = "SELECT * FROM details";
+	private final String selectAllState = "select * from state";
 	private final String selectByIdQuery = "SELECT * FROM details WHERE id=?";
+	private final String selectCityByState = "select * from city where s_id=?";
 	private final String checkUser = "select * from details";
 
 	public int add(Student student) throws SQLException {
@@ -30,7 +34,7 @@ public class StudentDao {
 		ps.setString(4, student.getGender());
 		ps.setString(5, student.getUsername());
 		ps.setString(6, student.getState());
-		ps.setString(7, student.getDistrict());
+		ps.setString(7, student.getCity());
 		ps.setString(8, student.getContact());
 		int result = ps.executeUpdate();
 		return result;
@@ -39,7 +43,7 @@ public class StudentDao {
 
 	public List<Student> getAll() throws SQLException {
 		List<Student> studentsList = new ArrayList<>();
-		PreparedStatement ps = con.prepareStatement(selectAllQuery);
+		PreparedStatement ps = con.prepareStatement(selectAllStudent);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
 			Student s = new Student();
@@ -50,11 +54,39 @@ public class StudentDao {
 			s.setGender(rs.getString(5));
 			s.setUsername(rs.getString(6));
 			s.setState(rs.getString(7));
-			s.setDistrict(rs.getString(8));
+			s.setCity(rs.getString(8));
 			s.setContact(rs.getString(9));
 			studentsList.add(s);
 		}
 		return studentsList;
+	}
+
+	public List<Student> getAllStates() throws SQLException {
+		List<Student> statesList = new ArrayList<>();
+		PreparedStatement ps = con.prepareStatement(selectAllState);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			Student s = new Student();
+			s.setS_id(rs.getInt(1));
+			s.setState(rs.getString(2));
+			statesList.add(s);
+		}
+		return statesList;
+	}
+
+	public List<Student> getCityByState(int stateId) throws SQLException {
+		List<Student> cityList = new ArrayList<>();
+		PreparedStatement ps = con.prepareStatement(selectCityByState);
+		ps.setInt(1, stateId);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			Student s = new Student();
+			s.setC_id(rs.getInt(1));
+			s.setS_id(rs.getInt(2));
+			s.setCity(rs.getString(3));
+			cityList.add(s);
+		}
+		return cityList;
 	}
 
 	public Student getById(int idStudent) throws SQLException {
@@ -70,7 +102,7 @@ public class StudentDao {
 			student.setGender(rs.getString(5));
 			student.setUsername(rs.getString(6));
 			student.setState(rs.getString(7));
-			student.setDistrict(rs.getString(8));
+			student.setCity(rs.getString(8));
 			student.setContact(rs.getString(9));
 			return student;
 		}
@@ -84,7 +116,7 @@ public class StudentDao {
 		ps.setDate(3, student.getBirthday());
 		ps.setString(4, student.getGender());
 		ps.setString(5, student.getState());
-		ps.setString(6, student.getDistrict());
+		ps.setString(6, student.getCity());
 		ps.setString(7, student.getContact());
 		ps.setInt(8, id);
 		int result = ps.executeUpdate();
@@ -95,9 +127,10 @@ public class StudentDao {
 	public int delete(String[] studentids) throws NumberFormatException, SQLException {
 		int result = 0;
 		for (String id : studentids) {
+			System.out.println(id);
 			PreparedStatement ps = con.prepareStatement(deleteQuery);
 			ps.setInt(1, Integer.parseInt(id));
-			result += ps.executeUpdate();
+			// result += ps.executeUpdate();
 		}
 		return result;
 	}
@@ -113,15 +146,33 @@ public class StudentDao {
 		return false;
 	}
 
-	public boolean contactExist(String contact) throws SQLException {
+	public boolean contactExist(String contact, int id) throws SQLException {
 		PreparedStatement ps = con.prepareStatement(checkUser);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			if (rs.getString(9).equals(contact)) {
+			if (rs.getString(9).equals(contact) && rs.getInt(1) != id) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public String getStateName(int state) throws SQLException {
+		String query = "{ call state(?) }";
+		CallableStatement st = con.prepareCall(query);
+		st.registerOutParameter(1, Types.VARCHAR);
+		st.setInt(1, state);
+		st.execute();
+		return st.getString(1);
+	}
+
+	public String getCityName(int city) throws SQLException {
+		String query = "{ call city(?) }";
+		CallableStatement st = con.prepareCall(query);
+		st.registerOutParameter(1, Types.VARCHAR);
+		st.setInt(1, city);
+		st.execute();
+		return st.getString(1);
 	}
 
 }

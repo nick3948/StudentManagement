@@ -1,8 +1,10 @@
-package com.studentdata.control;
+package com.studentdata.controller;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -43,8 +45,8 @@ public class StudentController extends HttpServlet {
 		String lastname = request.getParameter("lastname");
 		String birthday = request.getParameter("birthday");
 		String gender = request.getParameter("gender");
-		String state = request.getParameter("state");
-		String district = request.getParameter("district");
+		int state = Integer.parseInt(request.getParameter("state"));
+		int city = Integer.parseInt(request.getParameter("city"));
 		String contact = request.getParameter("contact");
 		String username = request.getParameter("username");
 		Date date = null;
@@ -52,6 +54,9 @@ public class StudentController extends HttpServlet {
 			date = Date.valueOf(birthday);
 			String curryear = df.format(currdate);
 			String year = df.format(date);
+			if (Integer.parseInt(curryear) < Integer.parseInt(year)) {
+				request.getSession().setAttribute("year", "fail");
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -59,8 +64,12 @@ public class StudentController extends HttpServlet {
 		student.setLastname(lastname);
 		student.setBirthday(date);
 		student.setGender(gender);
-		student.setState(state);
-		student.setDistrict(district);
+		if (state > 0 && city > 0) {
+			String stateName = service.getStateName(state);
+			student.setState(stateName);
+			String cityName = service.getCityName(city);
+			student.setCity(cityName);
+		}
 		if (id == 0) {
 			if (service.usernameExist(username)) {
 				request.getSession().setAttribute("userexist", "fail");
@@ -68,7 +77,7 @@ public class StudentController extends HttpServlet {
 				student.setUsername(username);
 			}
 		}
-		if (service.contactExist(contact)) {
+		if (service.contactExist(contact, id)) {
 			request.getSession().setAttribute("contactexist", "fail");
 		} else {
 			student.setContact(contact);
@@ -77,29 +86,39 @@ public class StudentController extends HttpServlet {
 		Validator validator = factory.getValidator();
 		Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
 		if (!constraintViolations.isEmpty()) {
-			String errors = "<ul>";
+			String error;
+			List<String> errors = new ArrayList<String>();
 			for (ConstraintViolation<Student> constraintViolation : constraintViolations) {
 				if (action != null && action.equals("edit")) {
-					if (constraintViolation.getPropertyPath().equals("username")) {
+					String propertyPath = constraintViolation.getPropertyPath().toString();
+					if (propertyPath.equals("username")) {
 						;
-					} else
-						errors += "<li>" + constraintViolation.getPropertyPath() + " "
-								+ constraintViolation.getMessage() + "</li>";
+					} else {
+						error = propertyPath + " " + constraintViolation.getMessage();
+						errors.add(error);
+					}
 				} else if (action != null && action.equals("add")) {
-					errors += "<li>" + constraintViolation.getPropertyPath() + " " + constraintViolation.getMessage()
-							+ "</li>";
+					String propertyPath = constraintViolation.getPropertyPath().toString();
+					error = propertyPath + " " + constraintViolation.getMessage();
+					errors.add(error);
 				}
 			}
-			errors += "</ul>";
 			request.setAttribute("student", student);
 			request.setAttribute("errors", errors);
-			if (id == 0)
+			if (id == 0) {
+				List<Student> states1;
+				states1 = service.getAllState();
+				request.setAttribute("statedrop", states1);
 				request.getRequestDispatcher("student_add.jsp").forward(request, response);
-			else
+			} else {
+				List<Student> states1;
+				states1 = service.getAllState();
+				request.setAttribute("statedrop", states1);
 				request.getRequestDispatcher("student_edit.jsp").forward(request, response);
+
+			}
 		} else {
 			int result = service.save(student, id);
-			System.out.println(result + " " + id);
 			if (result == 1 && id == 0) {
 				request.getSession().setAttribute("add", "success");
 			} else if (result != 1) {
@@ -112,56 +131,39 @@ public class StudentController extends HttpServlet {
 			}
 			response.sendRedirect(dashboardUrl);
 		}
-
-//		if (id == 0) {
-//			String username = request.getParameter("username");
-//			if (service.usernameExist(username)) {
-//				request.getSession().setAttribute("userexist", "fail");
-//				response.sendRedirect("student_add.jsp");
-//			} else {
-//				student.setUsername(username);
-//			}
-//		}
-//		if (Integer.parseInt(year) > Integer.parseInt(curryear)) {
-//			request.getSession().setAttribute("year", "fail");
-//			if (id == 0)
-//				response.sendRedirect("student_add.jsp");
-//			else
-//				doGet(request, response);
-//		} else if (!(contact.matches("[0-9]+") && contact.length() == 10)) {
-//			request.getSession().setAttribute("contact", "fail");
-//			if (id == 0)
-//				response.sendRedirect("student_add.jsp");
-//			else
-//				doGet(request, response);
-//		} else {
-//			int result = service.save(student, id);
-//			if (result == 1 && id == 0) {
-//				request.getSession().setAttribute("add", "success");
-//			} else if (result != 1) {
-//				request.getSession().setAttribute("add", "fail");
-//			}
-//			if (result == 1 && id > 0) {
-//				request.getSession().setAttribute("edit", "success");
-//			} else if (result != 1) {
-//				request.getSession().setAttribute("edit", "fail");
-//			}
-//			response.sendRedirect(dashboardUrl);
-//		}
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String dashboardUrl = request.getServletContext().getInitParameter("BASE_URL") + "/admin/dashboard";
 		String action = request.getParameter("act");
+		String s_id = request.getParameter("sid");
+		if (s_id != null) {
+			List<Student> cities;
+			cities = service.getCityByState(Integer.parseInt(s_id));
+			String citydrop = "<select required=\"required\" style=\"width: 177px;\" name=\"city\" id=\"inputCity\"\r\n"
+					+ "						class=\"form-control\">\r\n"
+					+ "						<option value=\"\">Select city</option>\r\n";
+			for (Student s : cities) {
+				citydrop += "<option value=" + s.getC_id() + ">" + s.getCity() + "</option>\r\n";
+			}
+			citydrop += "</select>";
+			response.getWriter().println(citydrop);
+		}
 		if (action != null) {
 			switch (action) {
 			case "add":
+				List<Student> states;
+				states = service.getAllState();
+				request.setAttribute("statedrop", states);
 				dispatcher = request.getRequestDispatcher("student_add.jsp");
 				dispatcher.forward(request, response);
 				break;
 
 			case "edit":
+				List<Student> states1;
+				states1 = service.getAllState();
+				request.setAttribute("statedrop", states1);
 				String[] studentEditId = request.getParameterValues("id");
 				if (studentEditId != null) {
 					if (studentEditId.length == 1) {
@@ -184,9 +186,13 @@ public class StudentController extends HttpServlet {
 				if (studentDeleteIds != null) {
 					int result = service.delete(studentDeleteIds);
 					if (result > 0) {
-						request.getSession().setAttribute("delete", "success");
+						request.setAttribute("delete", "success");
+						dispatcher = request.getRequestDispatcher("dashboard");
+						dispatcher.forward(request, response);
 					} else {
-						request.getSession().setAttribute("delete", "fail");
+						request.setAttribute("delete", "fail");
+						dispatcher = request.getRequestDispatcher("dashboard");
+						dispatcher.forward(request, response);
 					}
 				}
 				response.sendRedirect(dashboardUrl);

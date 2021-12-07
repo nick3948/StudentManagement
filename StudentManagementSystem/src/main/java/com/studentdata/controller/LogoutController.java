@@ -1,4 +1,4 @@
-package com.studentdata.control;
+package com.studentdata.controller;
 
 import java.io.IOException;
 
