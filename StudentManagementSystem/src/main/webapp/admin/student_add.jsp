@@ -62,39 +62,28 @@
 		<a href="logout"><button
 				class="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button></a>
 	</nav>
+
 	<%
-	String contact = (String) session.getAttribute("contactexist");
-	String year = (String) session.getAttribute("year");
-	String userexist = (String) session.getAttribute("userexist");
-	if (year != null && year.equals("fail")) {
+	@SuppressWarnings("unchecked")
+	List<String> error = (List<String>) request.getAttribute("errors");
+	if (error != null && error.size() > 0) {
 	%>
-	<div class="alert alert-danger alert-dismissable" role="alert">
-		Invalid Birth year!<a href="#" class="close" data-dismiss="alert"
-			aria-label="close">&nbsp;&#10007;</a>
+	<div class="alert alert-danger alert-dismissable" align="center"
+		role="alert">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
+		<%
+		for (String s : error) {
+		%>
+		<ul style="list-style: none;">
+			<li><%=s%></li>
+		</ul>
+		<%
+		}
+		%>
 	</div>
 	<%
-	session.removeAttribute("year");
-	}
-	if (contact != null && contact.equals("fail")) {
-	%>
-	<div class="alert alert-danger alert-dismissable" role="alert">
-		contact number already exist!<a href="#" class="close"
-			data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
-	</div>
-	<%
-	session.removeAttribute("contactexist");
-	}
-	if (userexist != null && userexist.equals("fail")) {
-	%>
-	<div class="alert alert-danger alert-dismissable" role="alert">
-		User_name already exist!<a href="#" class="close" data-dismiss="alert"
-			aria-label="close">&nbsp;&#10007;</a>
-	</div>
-	<%
-	session.removeAttribute("userexist");
 	}
 	%>
-	${errors }
 	<div class="div" align="center">
 		<h1>Save Student Details</h1>
 		<br>
@@ -113,7 +102,7 @@
 				<tr>
 					<td>Birthday</td>
 					<td><input value="${student.birthday }" type="date"
-						class="form-control-sm" name="birthday" /></td>
+						required="required" class="form-control-sm" name="birthday" /></td>
 				</tr>
 				<tr>
 					<td>Gender</td>
@@ -138,7 +127,7 @@
 
 							for (Student s : list) {
 							%>
-							<option value="<%=s.getC_id()%>"><%=s.getState()%></option>
+							<option value="<%=s.getS_id()%>"><%=s.getState()%></option>
 							<%
 							}
 							%>

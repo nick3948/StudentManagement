@@ -31,6 +31,7 @@ public class StudentController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		List<String> errors = new ArrayList<String>();
 		String dashboardUrl = request.getServletContext().getInitParameter("BASE_URL") + "/admin/dashboard";
 		String stuId = request.getParameter("id");
 		String action = request.getParameter("act");
@@ -55,7 +56,7 @@ public class StudentController extends HttpServlet {
 			String curryear = df.format(currdate);
 			String year = df.format(date);
 			if (Integer.parseInt(curryear) < Integer.parseInt(year)) {
-				request.getSession().setAttribute("year", "fail");
+				errors.add("Invalid birth year!");
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -72,13 +73,13 @@ public class StudentController extends HttpServlet {
 		}
 		if (id == 0) {
 			if (service.usernameExist(username)) {
-				request.getSession().setAttribute("userexist", "fail");
+				errors.add("username already Exist!!");
 			} else {
 				student.setUsername(username);
 			}
 		}
 		if (service.contactExist(contact, id)) {
-			request.getSession().setAttribute("contactexist", "fail");
+			errors.add("contact number already exist!");
 		} else {
 			student.setContact(contact);
 		}
@@ -87,7 +88,6 @@ public class StudentController extends HttpServlet {
 		Set<ConstraintViolation<Student>> constraintViolations = validator.validate(student);
 		if (!constraintViolations.isEmpty()) {
 			String error;
-			List<String> errors = new ArrayList<String>();
 			for (ConstraintViolation<Student> constraintViolation : constraintViolations) {
 				if (action != null && action.equals("edit")) {
 					String propertyPath = constraintViolation.getPropertyPath().toString();
