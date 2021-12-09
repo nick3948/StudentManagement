@@ -144,8 +144,8 @@ public class StudentController extends HttpServlet {
 			String citydrop = "<select required=\"required\" style=\"width: 177px;\" name=\"city\" id=\"inputCity\"\r\n"
 					+ "						class=\"form-control\">\r\n"
 					+ "						<option value=\"\">Select city</option>\r\n";
-			for (Student s : cities) {
-				citydrop += "<option value=" + s.getC_id() + ">" + s.getCity() + "</option>\r\n";
+			for (Student city : cities) {
+				citydrop += "<option value=" + city.getC_id() + ">" + city.getCity() + "</option>\r\n";
 			}
 			citydrop += "</select>";
 			response.getWriter().println(citydrop);
@@ -194,8 +194,8 @@ public class StudentController extends HttpServlet {
 						dispatcher = request.getRequestDispatcher("dashboard");
 						dispatcher.forward(request, response);
 					}
-				}
-				response.sendRedirect(dashboardUrl);
+				} else
+					response.sendRedirect(dashboardUrl);
 				break;
 
 			default:

@@ -136,7 +136,7 @@
 			%>
 			<tr class="table-row">
 				<td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="id"
-					class="checkboxid" value=<%=id%>></td>
+					id="checkboxone" class="checkboxid" value=<%=id%>></td>
 				<td><%=student.getFirstname()%></td>
 				<td><%=student.getLastname()%></td>
 				<td><%=student.getBirthday()%></td>
@@ -175,8 +175,8 @@
 				document.getElementById("queryparam").value = "delete";
 				document.getElementById("dashboardlist").submit();
 			}
-
 		}
+
 		function editFun() {
 			document.getElementById("queryparam").value = "edit";
 			document.getElementById("dashboardlist").submit();

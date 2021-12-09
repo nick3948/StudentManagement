@@ -125,9 +125,9 @@
 							@SuppressWarnings("unchecked")
 							List<Student> list = (List<Student>) request.getAttribute("statedrop");
 
-							for (Student s : list) {
+							for (Student state : list) {
 							%>
-							<option value="<%=s.getS_id()%>"><%=s.getState()%></option>
+							<option value="<%=state.getS_id()%>"><%=state.getState()%></option>
 							<%
 							}
 							%>
