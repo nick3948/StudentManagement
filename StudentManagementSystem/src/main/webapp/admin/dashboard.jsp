@@ -51,7 +51,7 @@
 			class="fas fa-adjust"></i></a>&nbsp;&nbsp;&nbsp;&nbsp; <a
 			title="click to logout!"
 			href="<%=request.getServletContext().getInitParameter("BASE_URL")%>/admin/logout"><button
-				class="btn btn-outline-danger my-2 my-sm-0">Logout</button></a>
+				class="btn btn-outline-danger active my-2 my-sm-0">Logout</button></a>
 	</nav>
 	<%
 	@SuppressWarnings("unchecked")
@@ -128,6 +128,7 @@
 				<th style="width: 10%;">Birthday</th>
 				<th style="width: 10%;">Gender</th>
 				<th style="width: 10%;">State</th>
+				<th style="width: 10%;">City</th>
 				<th style="width: 10%;">Contact</th>
 			</tr>
 			<%
@@ -142,6 +143,7 @@
 				<td><%=student.getBirthday()%></td>
 				<td><%=student.getGender()%></td>
 				<td><%=student.getState()%></td>
+				<td><%=student.getCity()%></td>
 				<td><%=student.getContact()%></td>
 			</tr>
 			<%
@@ -171,20 +173,24 @@
 			}
 		}
 		function deleteFun() {
+
 			if (confirm('Are you sure??')) {
 				document.getElementById("queryparam").value = "delete";
 				document.getElementById("dashboardlist").submit();
 			}
+
 		}
 
 		function editFun() {
+
 			document.getElementById("queryparam").value = "edit";
 			document.getElementById("dashboardlist").submit();
+
 		}
 		console.log(sessionStorage.getItem('count'));
 		window.onload = function myFunction() {
 			if (sessionStorage.getItem('count') % 2 == 0) {
-				document.body.style.backgroundColor = "#CDF0EA";
+				document.body.style.backgroundColor = "#DEEDF0";
 				document.body.style.color = "black";
 			} else {
 				document.body.style.backgroundColor = "black";
@@ -201,7 +207,7 @@
 				document.body.style.backgroundColor = "black";
 				document.body.style.color = "#03DAC6";
 			} else {
-				document.body.style.backgroundColor = "#CDF0EA";
+				document.body.style.backgroundColor = "#DEEDF0";
 				document.body.style.color = "black";
 			}
 		}

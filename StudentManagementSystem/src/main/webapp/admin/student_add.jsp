@@ -153,7 +153,7 @@
 	<script>
 		window.onload = function myFunction() {
 			if (sessionStorage.getItem('count') % 2 == 0) {
-				document.body.style.backgroundColor = "#CDF0EA";
+				document.body.style.backgroundColor = "#DEEDF0";
 				document.body.style.color = "black";
 			} else {
 				document.body.style.backgroundColor = "black";
