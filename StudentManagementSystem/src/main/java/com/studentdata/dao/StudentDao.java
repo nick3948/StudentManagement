@@ -24,19 +24,22 @@ public class StudentDao {
 	private final String selectCityByState = "select * from city where s_id=?";
 	private final String checkUser = "select * from details";
 
-	public int add(Student student) throws SQLException {
+	public int add(List<Student> studentList) throws SQLException {
 
 		// Insert
 		PreparedStatement ps = con.prepareStatement(insertQuery);
-		ps.setString(1, student.getFirstname());
-		ps.setString(2, student.getLastname());
-		ps.setDate(3, student.getBirthday());
-		ps.setString(4, student.getGender());
-		ps.setString(5, student.getUsername());
-		ps.setString(6, student.getState());
-		ps.setString(7, student.getCity());
-		ps.setString(8, student.getContact());
-		int result = ps.executeUpdate();
+		int result = 0;
+		for (Student student : studentList) {
+			ps.setString(1, student.getFirstname());
+			ps.setString(2, student.getLastname());
+			ps.setDate(3, student.getBirthday());
+			ps.setString(4, student.getGender());
+			ps.setString(5, student.getUsername());
+			ps.setString(6, student.getState());
+			ps.setString(7, student.getCity());
+			ps.setString(8, student.getContact());
+			result += ps.executeUpdate();
+		}
 		return result;
 
 	}
@@ -89,24 +92,27 @@ public class StudentDao {
 		return cityList;
 	}
 
-	public Student getById(int idStudent) throws SQLException {
+	public List<Student> getById(String[] studentEditId) throws SQLException {
+		List<Student> stulist = new ArrayList<>();
 		PreparedStatement ps = con.prepareStatement(selectByIdQuery);
-		ps.setInt(1, idStudent);
-		ResultSet rs = ps.executeQuery();
-		while (rs.next()) {
-			Student student = new Student();
-			student.setId(rs.getInt(1));
-			student.setFirstname(rs.getString(2));
-			student.setLastname(rs.getString(3));
-			student.setBirthday(rs.getDate(4));
-			student.setGender(rs.getString(5));
-			student.setUsername(rs.getString(6));
-			student.setState(rs.getString(7));
-			student.setCity(rs.getString(8));
-			student.setContact(rs.getString(9));
-			return student;
+		for (String id : studentEditId) {
+			ps.setInt(1, Integer.parseInt(id));
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Student student = new Student();
+				student.setId(rs.getInt(1));
+				student.setFirstname(rs.getString(2));
+				student.setLastname(rs.getString(3));
+				student.setBirthday(rs.getDate(4));
+				student.setGender(rs.getString(5));
+				student.setUsername(rs.getString(6));
+				student.setState(rs.getString(7));
+				student.setCity(rs.getString(8));
+				student.setContact(rs.getString(9));
+				stulist.add(student);
+			}
 		}
-		return null;
+		return stulist;
 	}
 
 	public int edit(Student student, int id) throws SQLException {
@@ -121,16 +127,14 @@ public class StudentDao {
 		ps.setInt(8, id);
 		int result = ps.executeUpdate();
 		return result;
-
 	}
 
 	public int delete(String[] studentids) throws NumberFormatException, SQLException {
 		int result = 0;
 		for (String id : studentids) {
-			System.out.println(id);
 			PreparedStatement ps = con.prepareStatement(deleteQuery);
 			ps.setInt(1, Integer.parseInt(id));
-			// result += ps.executeUpdate();
+			result += ps.executeUpdate();
 		}
 		return result;
 	}

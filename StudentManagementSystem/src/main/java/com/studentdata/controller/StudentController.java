@@ -118,7 +118,9 @@ public class StudentController extends HttpServlet {
 
 			}
 		} else {
-			int result = service.save(student, id);
+			List<Student> stud = new ArrayList<Student>();
+			stud.add(student);
+			int result = service.save(stud, id);
 			if (result == 1 && id == 0) {
 				request.getSession().setAttribute("add", "success");
 			} else if (result != 1) {
@@ -133,6 +135,7 @@ public class StudentController extends HttpServlet {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String dashboardUrl = request.getServletContext().getInitParameter("BASE_URL") + "/admin/dashboard";
@@ -167,9 +170,8 @@ public class StudentController extends HttpServlet {
 				String[] studentEditId = request.getParameterValues("id");
 				if (studentEditId != null) {
 					if (studentEditId.length == 1) {
-						int studentid = Integer.parseInt(studentEditId[0]);
-						student = service.getById(studentid);
-						request.setAttribute("student", student);
+						List<Student> student = service.getById(studentEditId);
+						request.setAttribute("student", student.get(0));
 						dispatcher = request.getRequestDispatcher("student_edit.jsp");
 						dispatcher.forward(request, response);
 					} else {
@@ -182,8 +184,18 @@ public class StudentController extends HttpServlet {
 				break;
 
 			case "delete":
+				List<Student> list = (List<Student>) request.getSession().getAttribute("undolist");
+				if (list != null) {
+					String perform = request.getParameter("perform");
+					if (perform != null && perform.equals("undo")) {
+						service.save(list, 0);
+					}
+					request.getSession().removeAttribute("undolist");
+				}
 				String[] studentDeleteIds = request.getParameterValues("id");
 				if (studentDeleteIds != null) {
+					List<Student> students = service.getById(studentDeleteIds);
+					request.getSession().setAttribute("undolist", students);
 					int result = service.delete(studentDeleteIds);
 					if (result > 0) {
 						request.setAttribute("delete", "success");
@@ -194,8 +206,9 @@ public class StudentController extends HttpServlet {
 						dispatcher = request.getRequestDispatcher("dashboard");
 						dispatcher.forward(request, response);
 					}
-				} else
+				} else {
 					response.sendRedirect(dashboardUrl);
+				}
 				break;
 
 			default:

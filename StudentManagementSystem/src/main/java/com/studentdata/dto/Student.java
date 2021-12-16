@@ -53,6 +53,13 @@ public class Student {
 		this.lastname = lastname;
 	}
 
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", gender=" + gender
+				+ ", username=" + username + ", password=" + password + ", s_id=" + s_id + ", state=" + state
+				+ ", c_id=" + c_id + ", city=" + city + ", contact=" + contact + ", birthday=" + birthday + "]";
+	}
+
 	public Date getBirthday() {
 		return birthday;
 	}

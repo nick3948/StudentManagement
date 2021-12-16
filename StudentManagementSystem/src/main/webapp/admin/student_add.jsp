@@ -167,7 +167,7 @@
 					document.getElementById("city").innerHTML = this.responseText;
 				}
 			};
-			xhttp.open("GET", "student?sid=" + s_id, true);
+			xhttp.open("GET", "student?sid=" + s_id, false);
 			xhttp.send();
 		}
 	</script>

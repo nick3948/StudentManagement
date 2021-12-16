@@ -9,13 +9,13 @@ import com.studentdata.dto.Student;
 public class StudentService {
 	StudentDao studentDao = new StudentDao();
 
-	public int save(Student student, int id) {
+	public int save(List<Student> list, int id) {
 
 		try {
 			if (id == 0)
-				return studentDao.add(student);
+				return studentDao.add(list);
 			else
-				return studentDao.edit(student, id);
+				return studentDao.edit(list.get(0), id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -44,10 +44,10 @@ public class StudentService {
 		return null;
 	}
 
-	public Student getById(int idStudent) {
+	public List<Student> getById(String[] studentEditId) {
 
 		try {
-			return studentDao.getById(idStudent);
+			return studentDao.getById(studentEditId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

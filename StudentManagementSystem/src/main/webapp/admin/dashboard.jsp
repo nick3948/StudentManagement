@@ -62,14 +62,15 @@
 	if (delete != null && delete.equals("success")) {
 	%>
 	<div class="alert alert-success alert-dismissable" role="alert">
-		Details deleted!<a href="#" class="close" data-dismiss="alert"
-			aria-label="close">&nbsp;&#10007;</a>
+		Details deleted! <a href="student?act=delete&perform=undo"><button
+				class="btn btn-info btn-sm">undo</button></a><a href="dashboard"
+			class="close" data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
 	} else if (delete != null && delete.equals("fail")) {
 	%>
 	<div class="alert alert-warning alert-dismissable" role="alert">
-		problem in deleting details!<a href="#" class="close"
+		problem in deleting details! <a href="dashboard" class="close"
 			data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
@@ -78,14 +79,14 @@
 	if (add != null && add.equals("success")) {
 	%>
 	<div class="alert alert-success alert-dismissable" role="alert">
-		Student added!<a href="#" class="close" data-dismiss="alert"
+		Student added!<a href="dashboard" class="close" data-dismiss="alert"
 			aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
 	} else if (add != null && add.equals("fail")) {
 	%>
 	<div class="alert alert-warning alert-dismissable" role="alert">
-		problem in adding details!!<a href="#" class="close"
+		problem in adding details!!<a href="dashboard" class="close"
 			data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
@@ -94,21 +95,21 @@
 	if (edit != null && edit.equals("success")) {
 	%>
 	<div class="alert alert-success alert-dismissable" role="alert">
-		Student edited!<a href="#" class="close" data-dismiss="alert"
+		Student edited!<a href="dashboard" class="close" data-dismiss="alert"
 			aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
 	} else if (edit != null && edit.equals("fail")) {
 	%>
 	<div class="alert alert-warning alert-dismissable" role="alert">
-		problem in editing details!!<a href="#" class="close"
+		problem in editing details!!<a href="dashboard" class="close"
 			data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
 	} else if (edit != null && edit.equals("checkmarks")) {
 	%>
 	<div class="alert alert-warning alert-dismissable" role="alert">
-		Please select only one student!!<a href="#" class="close"
+		Please select only one student!!<a href="dashboard" class="close"
 			data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
@@ -177,6 +178,7 @@
 			if (confirm('Are you sure??')) {
 				document.getElementById("queryparam").value = "delete";
 				document.getElementById("dashboardlist").submit();
+
 			}
 
 		}
@@ -192,9 +194,12 @@
 			if (sessionStorage.getItem('count') % 2 == 0) {
 				document.body.style.backgroundColor = "#DEEDF0";
 				document.body.style.color = "black";
+				sessionStorage.setItem("color", "light");
+
 			} else {
 				document.body.style.backgroundColor = "black";
 				document.body.style.color = "#03DAC6";
+				sessionStorage.setItem("color", "dark");
 			}
 		}
 		var button = document.getElementById("darkmodetoggle");
@@ -206,9 +211,11 @@
 			if (sessionStorage.getItem('count') % 2 != 0) {
 				document.body.style.backgroundColor = "black";
 				document.body.style.color = "#03DAC6";
+				sessionStorage.setItem("color", "dark");
 			} else {
 				document.body.style.backgroundColor = "#DEEDF0";
 				document.body.style.color = "black";
+				sessionStorage.setItem("color", "light");
 			}
 		}
 	</script>

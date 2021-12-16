@@ -34,8 +34,12 @@
 		</dependency>
 	</dependencies>
 	<build>
-	<finalName>StudentManagementSystem</finalName>
+		<finalName>StudentManagementSystem</finalName>
 		<plugins>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.9.1</version>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
