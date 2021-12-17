@@ -194,6 +194,7 @@ public class StudentController extends HttpServlet {
 				}
 				String[] studentDeleteIds = request.getParameterValues("id");
 				if (studentDeleteIds != null) {
+					System.out.println(studentDeleteIds.length + " in");
 					List<Student> students = service.getById(studentDeleteIds);
 					request.getSession().setAttribute("undolist", students);
 					int result = service.delete(studentDeleteIds);

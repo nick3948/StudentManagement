@@ -1,6 +1,7 @@
 package com.studentdata.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import com.studentdata.dto.Student;
@@ -23,7 +24,16 @@ public class DashboardController extends HttpServlet {
 		StudentService studentService = new StudentService();
 		students = studentService.getAll();
 		request.setAttribute("student", students);
-		
+		String action = request.getParameter("act");
+		if (action != null && action.equals("download")) {
+			response.setContentType("application/csv");
+			response.setHeader("content-disposition", "filename=" + "hi.csv"); // Filename
+
+			PrintWriter outx = response.getWriter();
+			outx.println(students.toString());
+			outx.flush();
+			outx.close();
+		}
 		// forward request to the view
 		RequestDispatcher dispathcer = request.getRequestDispatcher("dashboard.jsp");
 		dispathcer.forward(request, response);

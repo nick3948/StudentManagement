@@ -37,9 +37,13 @@
 			<li class="nav-item"><a style="cursor: pointer;"
 				class="nav-link" title="click to edit!" onclick="editFun()"><i
 					class="fas fa-user-edit "></i> Edit </a></li>
-			<li class="nav-item"><a style="cursor: pointer;"
+			<li style="border-right: 1px solid lightgrey;" class="nav-item"><a style="cursor: pointer; border-right: 1px solid white;"
 				class="nav-link" title="click to delete!" onclick="deleteFun()"><i
-					class="fas fa-user-minus "></i> Delete</a></li>
+					class="fas fa-user-minus "></i> Delete </a></li>
+			<li class="nav-item"><a style="cursor: pointer;"
+				class="nav-link" title="click to download!" onclick="exportTableToCSV()">
+					  &nbsp; <i class="fas fa-download"></i>
+			</a></li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0">
 			<input title="Search for students!!" onkeyup="myFunction()"
@@ -63,8 +67,8 @@
 	%>
 	<div class="alert alert-success alert-dismissable" role="alert">
 		Details deleted! <a href="student?act=delete&perform=undo"><button
-				class="btn btn-info btn-sm">undo</button></a><a href="dashboard"
-			class="close" data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
+				class="btn btn-info btn-sm">undo</button></a><a href="#" class="close"
+			data-dismiss="alert" aria-label="close">&nbsp;&#10007;</a>
 	</div>
 	<%
 	} else if (delete != null && delete.equals("fail")) {
@@ -217,6 +221,10 @@
 				document.body.style.color = "black";
 				sessionStorage.setItem("color", "light");
 			}
+		}
+
+		function exportTableToCSV() {
+			location.href = "dashboard?act=download";
 		}
 	</script>
 	<script type="text/javascript"
